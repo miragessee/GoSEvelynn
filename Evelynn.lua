@@ -3,7 +3,7 @@ if myHero.charName ~= "Evelynn" then return end
 -- [ update ]
 do
     
-    local Version = 1
+    local Version = 2
     
     local Files = {
         Lua = {
@@ -101,7 +101,7 @@ local LocalGameIsOnTop = Game.IsOnTop;
 
 local EnemyTraps = {}
 
-local SmiteNames = {'SummonerSmite', 'S5_SummonerSmiteDuel', 'S5_SummonerSmitePlayerGanker', 'S5_SummonerSmiteQuick', 'ItemSmiteAoE'};
+local SmiteNames = {'S5_SummonerSmiteDuel', 'S5_SummonerSmitePlayerGanker', 'S5_SummonerSmiteQuick', 'ItemSmiteAoE'};
 local mySmiteSlot = 0;
 
 local function GetSmite(smiteSlot)
@@ -528,7 +528,7 @@ local Spells = {
     ["Zyra"] = {"ZyraE"},
 }
 
-local Version, Author, LVersion = "v1", "miragessee", "8.18"
+local Version, Author, LVersion = "v2", "miragessee", "8.18"
 
 function Evelynn:LoadMenu()
     
@@ -850,7 +850,8 @@ function Evelynn:Harass()
     --if GetWTarget() then
     --    print("works")
     --end
-    print(GetSpellQName())
+    --print(GetSpellQName())
+    --print(myHero:GetSpellData(SUMMONER_2).name)
     
     local target = GOS:GetTarget(GetWRange(), "AP")
     
