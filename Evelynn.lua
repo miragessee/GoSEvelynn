@@ -3,7 +3,7 @@ if myHero.charName ~= "Evelynn" then return end
 -- [ update ]
 do
     
-    local Version = 2
+    local Version = 3
     
     local Files = {
         Lua = {
@@ -410,6 +410,8 @@ local WIcon = "https://vignette.wikia.nocookie.net/leagueoflegends/images/1/16/A
 local EIcon = "https://vignette.wikia.nocookie.net/leagueoflegends/images/5/5f/Empowered_Whiplash.png"
 local RIcon = "https://vignette.wikia.nocookie.net/leagueoflegends/images/5/58/Last_Caress.png"
 local HPIcon = "https://vignette.wikia.nocookie.net/leagueoflegends/images/8/8d/Hextech_Protobelt-01_item.png"
+local BCIcon = "https://vignette.wikia.nocookie.net/leagueoflegends/images/4/44/Bilgewater_Cutlass_item.png"
+local HGIcon = "https://vignette.wikia.nocookie.net/leagueoflegends/images/6/64/Hextech_Gunblade_item.png"
 local SmiteIcon = "https://vignette.wikia.nocookie.net/leagueoflegends/images/0/05/Smite.png"
 local IS = {}
 local Spells = {
@@ -528,7 +530,7 @@ local Spells = {
     ["Zyra"] = {"ZyraE"},
 }
 
-local Version, Author, LVersion = "v2", "miragessee", "8.18"
+local Version, Author, LVersion = "v3", "miragessee", "8.18"
 
 function Evelynn:LoadMenu()
     
@@ -564,6 +566,7 @@ function Evelynn:LoadMenu()
     self.EvelynnMenu.KillSteal:MenuElement({id = "UseE", name = "Use E", value = true, leftIcon = EIcon})
     self.EvelynnMenu.KillSteal:MenuElement({id = "UseR", name = "Use R", value = true, leftIcon = RIcon})
     self.EvelynnMenu.KillSteal:MenuElement({id = "UseHP", name = "Use Hextech Probelt", value = true, leftIcon = HPIcon})
+    self.EvelynnMenu.KillSteal:MenuElement({id = "UseHG", name = "Use Hextech Gunblade", value = true, leftIcon = HGIcon})
     self.EvelynnMenu.KillSteal:MenuElement({id = "UseIgnite", name = "Use Ignite", value = true, leftIcon = IgniteIcon})
     
     self.EvelynnMenu:MenuElement({id = "Clear", name = "Clear", type = MENU})
@@ -591,6 +594,7 @@ end
 
 function Evelynn:LoadSpells()
     EvelynnQ = {delay = 0.25, speed = 2200, radius = 35, range = 800}
+    EvelynnQ2 = {delay = 0.25, speed = 2200, radius = 35, range = 500}
     EvelynnW = {range1 = 1200, range2 = 1300, range3 = 1400, range4 = 1500, range5 = 1600}
     EvelynnE = {range = 210}
     EvelynnR = {delay = 0.35, speed = math.huge, radius = 80, range = 450}
@@ -852,6 +856,10 @@ function Evelynn:Harass()
     --end
     --print(GetSpellQName())
     --print(myHero:GetSpellData(SUMMONER_2).name)
+
+    --print(myHero:GetSpellData(_Q).range)
+
+    --print(GetSpellQName()) EvelynnQ EvelynnQ2
     
     local target = GOS:GetTarget(GetWRange(), "AP")
     
@@ -882,15 +890,17 @@ function Evelynn:Harass()
     if self.EvelynnMenu.Harass.UseQ:Value() then
         if IsReady(_Q) and GetSpellQName() == "EvelynnQ" and self.Collision == false then
             if ValidTarget(target, EvelynnQ.range) then
-                local hitChance, aimPosition = HPred:GetHitchance(myHero.pos, target, EvelynnQ.range, EvelynnQ.delay, EvelynnQ.speed, EvelynnQ.radius, true)
-                if hitChance and hitChance >= 2 then
-                    if GetMinionCollision(myHero.pos, aimPosition, EvelynnQ.radius) == 0 then
-                        self:CastQ(target, aimPosition)
-                    end
-                end
+                --local hitChance, aimPosition = HPred:GetHitchance(myHero.pos, target, EvelynnQ.range, EvelynnQ.delay, EvelynnQ.speed, EvelynnQ.radius, true)
+                --if hitChance and hitChance >= 1 then
+                    --if GetMinionCollision(myHero.pos, aimPosition, EvelynnQ.radius) == 0 then
+                        --self:CastQ(target, aimPosition)
+                    --end
+                --end
+                LocalControlCastSpell(HK_Q, target)
             end
-        elseif IsReady(_Q) and self.Collision == false then
-            if ValidTarget(target, EvelynnQ.range) then
+        end
+        if IsReady(_Q) and GetSpellQName() == "EvelynnQ2" then
+            if ValidTarget(target, EvelynnQ2.range) then
                 LocalControlCastSpell(HK_Q, target)
             end
         end
@@ -1003,15 +1013,17 @@ function Evelynn:Combo()
                 if self.EvelynnMenu.Combo.UseQ:Value() then
                     if IsReady(_Q) and GetSpellQName() == "EvelynnQ" and self.Collision == false then
                         if ValidTarget(targetW, EvelynnQ.range) then
-                            local hitChance, aimPosition = HPred:GetHitchance(myHero.pos, targetW, EvelynnQ.range, EvelynnQ.delay, EvelynnQ.speed, EvelynnQ.radius, true)
-                            if hitChance and hitChance >= 2 then
-                                if GetMinionCollision(myHero.pos, aimPosition, EvelynnQ.radius) == 0 then
-                                    self:CastQ(targetW, aimPosition)
-                                end
-                            end
+                            --local hitChance, aimPosition = HPred:GetHitchance(myHero.pos, targetW, EvelynnQ.range, EvelynnQ.delay, EvelynnQ.speed, EvelynnQ.radius, true)
+                            --if hitChance and hitChance >= 1 then
+                                --if GetMinionCollision(myHero.pos, aimPosition, EvelynnQ.radius) == 0 then
+                                    --self:CastQ(targetW, aimPosition)
+                                --end
+                            --end
+                            LocalControlCastSpell(HK_Q, targetW)
                         end
-                    elseif IsReady(_Q) and self.Collision == false then
-                        if ValidTarget(targetW, EvelynnQ.range) then
+                    end
+                    if IsReady(_Q) and GetSpellQName() == "EvelynnQ2" then
+                        if ValidTarget(targetW, EvelynnQ2.range) then
                             LocalControlCastSpell(HK_Q, targetW)
                         end
                     end
@@ -1044,15 +1056,17 @@ function Evelynn:Combo()
             if self.EvelynnMenu.Combo.UseQ:Value() then
                 if IsReady(_Q) and GetSpellQName() == "EvelynnQ" and self.Collision == false then
                     if ValidTarget(target, EvelynnQ.range) then
-                        local hitChance, aimPosition = HPred:GetHitchance(myHero.pos, target, EvelynnQ.range, EvelynnQ.delay, EvelynnQ.speed, EvelynnQ.radius, true)
-                        if hitChance and hitChance >= 2 then
-                            if GetMinionCollision(myHero.pos, aimPosition, EvelynnQ.radius) == 0 then
-                                self:CastQ(target, aimPosition)
-                            end
-                        end
+                        --local hitChance, aimPosition = HPred:GetHitchance(myHero.pos, target, EvelynnQ.range, EvelynnQ.delay, EvelynnQ.speed, EvelynnQ.radius, true)
+                        --if hitChance and hitChance >= 1 then
+                            --if GetMinionCollision(myHero.pos, aimPosition, EvelynnQ.radius) == 0 then
+                                --self:CastQ(target, aimPosition)
+                            --end
+                        --end
+                        LocalControlCastSpell(HK_Q, target)
                     end
-                elseif IsReady(_Q) and self.Collision == false then
-                    if ValidTarget(target, EvelynnQ.range) then
+                end
+                if IsReady(_Q) and GetSpellQName() == "EvelynnQ2" then
+                    if ValidTarget(target, EvelynnQ2.range) then
                         LocalControlCastSpell(HK_Q, target)
                     end
                 end
